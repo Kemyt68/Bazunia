@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bazunia", "Bazunia.csproj", "{C39E9126-FF1D-4299-9546-D346B0F3CCFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "..\Updater\Updater.csproj", "{AAD363E8-0E18-452D-80A6-67182DFF506A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C39E9126-FF1D-4299-9546-D346B0F3CCFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C39E9126-FF1D-4299-9546-D346B0F3CCFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C39E9126-FF1D-4299-9546-D346B0F3CCFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD363E8-0E18-452D-80A6-67182DFF506A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD363E8-0E18-452D-80A6-67182DFF506A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD363E8-0E18-452D-80A6-67182DFF506A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD363E8-0E18-452D-80A6-67182DFF506A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

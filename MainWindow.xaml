@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Bazunia"
         mc:Ignorable="d"
         Title="Jutro egzamin?" Height="450" Width="800">
-    <Grid Background="HotPink">
+    <Grid Background="#FF99FF">
         <Image Source="Images/ham.png" Width="200" Height="150" Margin="39,216,561,0" VerticalAlignment="Top"/>
         <Button Content="Browse" Click="Click_BrowseBaza" HorizontalAlignment="Center" Margin="0,332,0,0" VerticalAlignment="Top" Height="34" Width="70"/>
         <Label Content="Wybierz plik z pytaniami:" HorizontalAlignment="Center" Margin="0,294,0,0" VerticalAlignment="Top" Height="33" Width="152"/>
@@ -87,10 +87,12 @@
             </StackPanel>
         </Grid>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="98" Margin="10,16,0,0" VerticalAlignment="Top" Width="767" RenderTransformOrigin="0.5,0.5">
-            <CheckBox Name ="PytNastLin" Content="Treść pytania w następnej linijce" HorizontalAlignment="Left" Width="270" Height="39" VerticalAlignment="Top" Margin="565,74,0,0"/>
+            <CheckBox x:Name ="PytNastLin" Content="Treść pytania w następnej linijce" HorizontalAlignment="Left" Width="270" Height="39" VerticalAlignment="Top" Margin="565,74,0,0"/>
         </Border>
         <Label Content="Pytania" HorizontalAlignment="Left" Margin="707,52,0,0" VerticalAlignment="Top"/>
         <Label Content="Odpowiedzi" HorizontalAlignment="Left" Margin="604,157,0,0" VerticalAlignment="Top"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="98" Margin="10,127,0,0" VerticalAlignment="Top" Width="674" RenderTransformOrigin="0.5,0.5"/>
+        <CheckBox x:Name ="FiszkaCheckBox" Content="Fiszki: przód i tył" HorizontalAlignment="Left" Width="270" Height="39" VerticalAlignment="Top" Margin="298,230,0,0"/>
+
     </Grid>
 </Window>

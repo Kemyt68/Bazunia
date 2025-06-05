@@ -25,6 +25,7 @@ using Path = System.IO.Path;
 namespace Bazunia
 
 
+
 {
     public struct Parametry
     {
@@ -36,6 +37,7 @@ namespace Bazunia
         public int pytCount;
 
     };
+
 
 
     public partial class MainWindow : Window
@@ -55,7 +57,8 @@ namespace Bazunia
         "Numer",
         "<tab>",
         "<spacja>",
-        "Tekst"
+        "Tekst",
+        "Dowolny"
         };
 
         List<ComboBox> OdpAComboBoxList;
@@ -69,7 +72,8 @@ namespace Bazunia
         "<spacja>",
         "Tekst",
         ")",
-        "("
+        "(",
+        "Dowolny"
         };
 
         public string faultyLine = FAUTY_LINE_MSG;
@@ -94,6 +98,9 @@ namespace Bazunia
                 string? wybranaOpcja = comboBox.SelectedItem as string;
                 switch (wybranaOpcja)
                 {
+                    case "Dowolny":
+                        return TRUE;
+
                     case ".":
                         try
                         {
@@ -260,8 +267,9 @@ namespace Bazunia
         public bool FindOdp(string str)
         {
 
-
+            //Warunek niespełniony
             const int FALSE = 0;
+            //Warunek spełniony
             const int TRUE = 1;
             const int SKIP = 2;
             int i = 0;
@@ -276,6 +284,8 @@ namespace Bazunia
                 string? wybranaOpcja = comboBox.SelectedItem as string;
                 switch (wybranaOpcja)
                 {
+                    case "Dowolny":
+                        return TRUE;
                     case ".":
                         try
                         {
@@ -504,20 +514,25 @@ namespace Bazunia
 
         public int DecodeLine(string line)
         {
+            //osobna zmienna wynik, aby ogarnąć przypadek, gdy pytanie jest "dowolne" to żeby szukał pytania, a nie od razu zwracał pytanie
+            int wynik = 0;
+
             if (FindPyt(line))
             {
-
-                return PYTANIE;
+                wynik = PYTANIE;
             }
             if (FindOdp(line))
             {
-                return ODP;
+                wynik = ODP;
             }
+
+
+
             if (line.Length < 2)
             {
-                return SKIP;
+                wynik = SKIP;
             }
-            else
+            else if(wynik!=PYTANIE&&wynik!=ODP) 
             {
                 foreach (char c in line)
                 {
@@ -527,8 +542,9 @@ namespace Bazunia
                         return 69; // Znaleziono literę
                     }
                 }
-                return SKIP; // Brak liter
+                wynik = SKIP; // Brak liter
             }
+            return wynik;
         }
 
         public static string ZabezpieczLinie(string line)
@@ -617,23 +633,14 @@ namespace Bazunia
             //MessageBox.Show(bazaPath, "path", MessageBoxButton.OK, MessageBoxImage.None);
             //string bazaPath = "C:\Users\Acer\Desktop";
 
-            //zlicza ile maksymalnie jest opdowiedzi pod którymś pytaniem
-            //potrzebne do określenia liczby pól dla importu do Anek
-            if (!ZliczPytOdp(p.sur))
+            if (FiszkaCheckBox.IsChecked==true)
             {
-                //MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount, "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
+                PrzygotujBazeFiszki();
             }
             else
             {
-                if(p.maxOdpCount<7)
-                    MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount, "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
-                else
-                    MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount +"UWAGA więcej niż 6 pytań kontakt do tymon", "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
+                PrzygotujBazeABCD();
             }
-
-            p.sur = new StreamReader(p.surPath);
-
-            PrzygotujBaze();
 
         }
 
@@ -641,7 +648,8 @@ namespace Bazunia
         {
             return line.Substring(3); // usuń na sztywno trzy pierwsze znaki z dodpowiedzi
         }
-        private void WstawOdp(int ileWstawionych)
+        
+        private void WstawOdpABCD(int ileWstawionych)
         {
             int ile = p.maxOdpCount;
             //Wstaw ; po ostatniej wczytanej odpowiedzi
@@ -686,7 +694,7 @@ namespace Bazunia
             numerLinii++;
             return p.sur.ReadLine();
         }
-        private void PrzygotujBaze()
+        private void PrzygotujBazeABCD()
         {
             string? line;
             // streampos prevline;
@@ -694,6 +702,21 @@ namespace Bazunia
             int ileOdp = 0;
             // Która z wymienionych struktur znajduje się w uchu środkowym ? ;;2;Błędnik.;Wrzecionko.;Przychłonka.;Aparat przedsionkowy.;Kosteczki słuchowe.;0 1 0 0 0;;;
 
+            //zlicza ile maksymalnie jest opdowiedzi pod którymś pytaniem
+            //potrzebne do określenia liczby pól dla importu do 
+            if (p.sur!=null && ZliczPytOdp(p.sur))
+            {
+                if (p.maxOdpCount < 7)
+                    MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount, "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
+                else
+                    MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount + "UWAGA więcej niż 6 pytań kontakt do tymon", "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
+            }
+            else
+            {
+                //MessageBox.Show("Liczba pytań: " + p.pytCount + "\nMax liczba odp: " + p.maxOdpCount, "Wynik", MessageBoxButton.OK, MessageBoxImage.None);
+            }
+
+            p.sur = new StreamReader(p.surPath);
 
             while (true)
             {
@@ -720,7 +743,7 @@ namespace Bazunia
                             // koniec odpowiedzi
 
 
-                            WstawOdp(ileOdp);
+                            WstawOdpABCD(ileOdp);
                             // klucz = "";
                         }
 
@@ -766,11 +789,71 @@ namespace Bazunia
             }
 
             // koniec odpowiedzi
-            WstawOdp(ileOdp);
+            WstawOdpABCD(ileOdp);
 
 
         }
 
+        private void PrzygotujBazeFiszki()
+        {
+            string? line;
+            int lineType, prevLineType = PYTANIE;
+
+            //p.sur = new StreamReader(p.surPath);
+
+
+            while (true)
+            {
+                line = PobierzLinie();
+                if (line == null) { break; }
+
+                // cout << line << endl;
+                lineType = DecodeLine(line);
+
+
+
+
+                switch (lineType)
+                {
+                    case PYTANIE:
+                        // Jeśli pytanie ma być w następnej linii, to ją pobierz
+                        if (PytNastLin.IsChecked == true)
+                        {
+                            line = PobierzLinie();
+                        }
+
+                        line = ZabezpieczLinie(line);
+
+                        File.AppendAllText(p.bazaPath, "\n" + line);
+                        break;
+
+
+                    case ODP:
+                        if (prevLineType == PYTANIE)
+                        {
+                            //wstaw ; 
+                            File.AppendAllText(p.bazaPath, ";");
+                        }
+
+                        line = ZabezpieczLinie(line);
+                        File.AppendAllText(p.bazaPath, line);
+
+                        break;
+
+                    case SKIP:
+                        lineType = prevLineType;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                prevLineType = lineType;
+
+            }
+
+
+        }
         private StreamReader? OpenFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -842,11 +925,12 @@ namespace Bazunia
 
         private Parametry p;
 
+
+
         public MainWindow()
         {
             InitializeComponent();
             p.sur?.Close();
-
 
             PytAComboBoxList = new List<ComboBox> { Pyt1, Pyt2, Pyt3, Pyt4 };
             PytBComboBoxList = new List<ComboBox> { Pyt5, Pyt6, Pyt7, Pyt8 };
